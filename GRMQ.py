@@ -106,6 +106,10 @@ class GRMQ(object):
         properties = pika.BasicProperties(app_id=self.MYNAME, content_type='application/json', headers=message)
         self._channel.basic_publish(self.EXCHANGE, '', json.dumps(message, ensure_ascii=False), properties)
 
+    def publish_text(self, message):
+        properties = pika.BasicProperties(app_id=self.MYNAME)
+        self._channel.basic_publish(self.EXCHANGE, '', message, properties)
+
     def template_on_message(self, unused_channel, basic_deliver, properties, body):
         print(" **** Received message # %s from %s: %s" % (basic_deliver.delivery_tag, properties.app_id, body))
         self.acknowledge_message(basic_deliver.delivery_tag)
